@@ -8,13 +8,651 @@
       content="生活台語挑戰：適合國中小學生的閩南語文情境式互動練習網頁。"
     />
     <title>生活台語挑戰</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
+    <style>
+:root {
+  color-scheme: light;
+  --ink: #172026;
+  --muted: #66727d;
+  --line: #d8e0e5;
+  --paper: #fffdf8;
+  --surface: #ffffff;
+  --teal: #0f766e;
+  --teal-dark: #0b514e;
+  --gold: #f4b63f;
+  --coral: #e5533d;
+  --green: #1f8a54;
+  --blue: #2b67d1;
+  --shadow: 0 18px 50px rgba(31, 44, 56, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    linear-gradient(90deg, rgba(15, 118, 110, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(229, 83, 61, 0.06) 1px, transparent 1px),
+    #f6f2e9;
+  background-size: 28px 28px;
+}
+
+button {
+  font: inherit;
+}
+
+.app-shell {
+  width: min(1440px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 20px;
+  padding: 20px;
+}
+
+.game-panel,
+.mini-panel {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(23, 32, 38, 0.08);
+  box-shadow: var(--shadow);
+}
+
+.game-panel {
+  border-radius: 8px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: var(--teal-dark);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0;
+  font-size: clamp(2rem, 4vw, 4.2rem);
+  line-height: 1;
+  font-weight: 900;
+}
+
+.score-card {
+  min-width: 108px;
+  min-height: 78px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: var(--gold);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.score-card span {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.score-card strong {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.scenario-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.tab,
+.mode-button,
+.primary-button,
+.ghost-button,
+.icon-button {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.tab {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 800;
+}
+
+.tab:hover,
+.mode-button:hover,
+.ghost-button:hover,
+.icon-button:hover,
+.answer-button:hover {
+  transform: translateY(-1px);
+}
+
+.tab.is-active {
+  background: var(--teal);
+  color: #fff;
+  border-color: var(--teal);
+}
+
+.tab-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.24);
+  border: 1px solid currentColor;
+  font-size: 0.85rem;
+}
+
+.content-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(280px, 0.92fr) minmax(360px, 1.08fr);
+  gap: 18px;
+}
+
+.scene-stage,
+.challenge-card {
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  min-height: 560px;
+}
+
+.scene-stage {
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: minmax(300px, 1fr) auto;
+}
+
+.scene-visual {
+  position: relative;
+  min-height: 320px;
+  background: linear-gradient(180deg, #24384b 0%, #344f63 52%, #f2ca78 52%, #df864c 100%);
+}
+
+.scene-visual::before,
+.scene-visual::after {
+  content: "";
+  position: absolute;
+  inset: auto 10% 18% 10%;
+  height: 42%;
+  border: 4px solid #182129;
+  border-radius: 8px 8px 2px 2px;
+  background:
+    linear-gradient(90deg, #e5533d 0 18%, #fff4cf 18% 36%, #0f766e 36% 54%, #fff4cf 54% 72%, #e5533d 72%),
+    linear-gradient(#f7d56d, #f7d56d);
+  background-size: 100% 35%, 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top, bottom;
+  box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.22);
+}
+
+.scene-visual::after {
+  inset: auto 18% 10% 18%;
+  height: 18%;
+  border-width: 3px;
+  background: #fff7df;
+}
+
+.scene-stage[data-scene="market"] .scene-visual {
+  background: linear-gradient(180deg, #b9d9c4 0%, #f4e4bd 54%, #6d9d63 54%, #487544 100%);
+}
+
+.scene-stage[data-scene="market"] .scene-visual::before {
+  background:
+    linear-gradient(90deg, #2b67d1 0 20%, #fffdf8 20% 40%, #f4b63f 40% 60%, #fffdf8 60% 80%, #2b67d1 80%),
+    linear-gradient(#d85b4a, #d85b4a);
+}
+
+.scene-stage[data-scene="school"] .scene-visual {
+  background: linear-gradient(180deg, #8ac6d6 0%, #d9eef2 54%, #c8d971 54%, #90a64f 100%);
+}
+
+.scene-stage[data-scene="school"] .scene-visual::before {
+  background:
+    linear-gradient(90deg, #f4b63f 0 24%, #fffdf8 24% 48%, #0f766e 48% 72%, #fffdf8 72%),
+    linear-gradient(#f7f1df, #f7f1df);
+}
+
+.scene-stage[data-scene="transport"] .scene-visual {
+  background: linear-gradient(180deg, #a9c7e8 0%, #e7f0f8 58%, #5c6670 58%, #363e45 100%);
+}
+
+.scene-stage[data-scene="transport"] .scene-visual::before {
+  background:
+    linear-gradient(90deg, #e5533d 0 30%, #f4b63f 30% 70%, #e5533d 70%),
+    linear-gradient(#ffffff, #ffffff);
+}
+
+.scene-copy {
+  padding: 24px;
+}
+
+.scene-label {
+  width: fit-content;
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #e7f5f2;
+  color: var(--teal-dark);
+  font-weight: 800;
+  font-size: 0.88rem;
+}
+
+.scene-copy h2 {
+  margin-bottom: 8px;
+  font-size: clamp(1.55rem, 2.4vw, 2.6rem);
+  line-height: 1.12;
+}
+
+.scene-copy p:last-child {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 1.04rem;
+}
+
+.challenge-card {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.progress-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.progress-track {
+  height: 10px;
+  border-radius: 999px;
+  background: #e5edf0;
+  overflow: hidden;
+}
+
+.progress-track span {
+  display: block;
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--green);
+  transition: width 220ms ease;
+}
+
+.speaker-box {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 18px;
+  border-radius: 8px;
+  background: #172026;
+  color: #fff;
+}
+
+.avatar {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--gold);
+  color: var(--ink);
+  font-weight: 900;
+}
+
+.speaker-name {
+  margin-bottom: 4px;
+  color: #a9f0e4;
+  font-weight: 800;
+}
+
+.speaker-box h3 {
+  margin-bottom: 8px;
+  font-size: clamp(1.35rem, 2.2vw, 2.15rem);
+  line-height: 1.2;
+}
+
+.translation {
+  margin-bottom: 0;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.answer-list {
+  display: grid;
+  gap: 10px;
+}
+
+.answer-button {
+  width: 100%;
+  min-height: 68px;
+  padding: 12px 14px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.answer-button strong {
+  display: block;
+  font-size: 1.12rem;
+  line-height: 1.28;
+}
+
+.answer-button span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.answer-button.is-correct {
+  border-color: var(--green);
+  background: #ecf8ef;
+}
+
+.answer-button.is-wrong {
+  border-color: var(--coral);
+  background: #fff0ec;
+}
+
+.answer-button:disabled {
+  cursor: default;
+}
+
+.feedback {
+  min-height: 104px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 1px dashed #b7c4ca;
+  background: #f8fbfb;
+}
+
+.feedback strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.feedback p {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.feedback.success {
+  border-color: var(--green);
+  background: #eff9f1;
+}
+
+.feedback.error {
+  border-color: var(--coral);
+  background: #fff2ef;
+}
+
+.actions {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 10px;
+}
+
+.ghost-button,
+.primary-button {
+  min-height: 50px;
+  font-weight: 900;
+}
+
+.ghost-button {
+  background: #fff;
+}
+
+.primary-button {
+  border-color: var(--teal);
+  background: var(--teal);
+  color: #fff;
+}
+
+.primary-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.learning-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mini-panel {
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.mini-panel h2 {
+  margin-bottom: 0;
+  font-size: 1.15rem;
+}
+
+.panel-heading span {
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #eef3f5;
+  color: var(--teal-dark);
+  font-weight: 900;
+  font-size: 0.84rem;
+}
+
+.mission-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.mission-list li {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #f3f7f8;
+}
+
+.mission-list span {
+  height: 44px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 900;
+  font-size: 1.25rem;
+}
+
+.mission-list p {
+  margin-bottom: 0;
+  font-weight: 800;
+}
+
+.phrase-card {
+  padding: 14px;
+  border-radius: 8px;
+  background: #fff8e7;
+  border: 1px solid #efd99c;
+}
+
+.taiwanese {
+  margin-bottom: 8px;
+  font-size: 1.3rem;
+  line-height: 1.35;
+  font-weight: 900;
+}
+
+.romanization {
+  margin-bottom: 8px;
+  color: var(--blue);
+  font-weight: 700;
+}
+
+.meaning {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.icon-button {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.mode-button {
+  min-height: 44px;
+  font-weight: 900;
+}
+
+.mode-button.is-selected {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+#modeDescription {
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+@media (max-width: 1080px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .learning-panel {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 820px) {
+  .app-shell {
+    padding: 12px;
+  }
+
+  .game-panel {
+    padding: 14px;
+  }
+
+  .topbar {
+    align-items: flex-start;
+  }
+
+  .score-card {
+    min-width: 88px;
+    min-height: 68px;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .scenario-tabs,
+  .content-grid,
+  .learning-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .tab {
+    justify-content: flex-start;
+    padding: 0 14px;
+  }
+
+  .scene-stage,
+  .challenge-card {
+    min-height: auto;
+  }
+
+  .scene-visual {
+    min-height: 240px;
+  }
+
+  .progress-row,
+  .actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar {
+    display: grid;
+  }
+
+  .score-card {
+    justify-self: start;
+  }
+
+  .speaker-box {
+    padding: 14px;
+  }
+
+  .avatar {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+    </style>
   </head>
   <body>
     <main class="app-shell">
@@ -144,6 +782,582 @@
       </aside>
     </main>
 
-    <script src="script.js"></script>
+    <script>
+const scenarios = {
+  nightMarket: {
+    label: "夜市點餐",
+    title: "在熱鬧的夜市買晚餐",
+    prompt: "老闆問你想點什麼，請選出最自然的台語回答。",
+    speaker: "夜市老闆",
+    avatar: "闆",
+    scene: "nightMarket",
+    questions: [
+      {
+        line: "你欲食啥物？",
+        translation: "你想吃什麼？",
+        hint: "點餐時可以用「我欲...」開頭，表示「我要...」。",
+        answers: [
+          {
+            text: "我欲一份蚵仔煎，感謝。",
+            romanization: "Guá beh tsi̍t hūn ô-á-tsian, kám-siā.",
+            meaning: "我要一份蚵仔煎，謝謝。",
+            correct: true,
+            note: "「我欲」是生活中常見的需求表達，點餐很自然。"
+          },
+          {
+            text: "我袂記得冊包佇佗位。",
+            romanization: "Guá bē kì-tit tsheh-pau tī tó-uī.",
+            meaning: "我不記得書包在哪裡。",
+            correct: false
+          },
+          {
+            text: "今仔日天氣真好。",
+            romanization: "Kin-á-ji̍t thinn-khì tsin hó.",
+            meaning: "今天天氣很好。",
+            correct: false
+          }
+        ]
+      },
+      {
+        line: "欲辣抑是袂辣？",
+        translation: "要辣還是不辣？",
+        hint: "「袂」在這裡表示「不會、不」。",
+        answers: [
+          {
+            text: "小可辣就好。",
+            romanization: "Sió-khuá lua̍h tō hó.",
+            meaning: "一點辣就好。",
+            correct: true,
+            note: "「小可」表示一點點，適合用在口味調整。"
+          },
+          {
+            text: "我欲去圖書館借冊。",
+            romanization: "Guá beh khì tôo-su-koán tsioh tsheh.",
+            meaning: "我要去圖書館借書。",
+            correct: false
+          },
+          {
+            text: "這台車敢有到車頭？",
+            romanization: "Tsit tâi tshia kám ū kàu tshia-thâu?",
+            meaning: "這班車有到車站嗎？",
+            correct: false
+          }
+        ]
+      },
+      {
+        line: "攏總一百箍。",
+        translation: "總共一百元。",
+        hint: "結帳時可以確認金額，再說謝謝。",
+        answers: [
+          {
+            text: "好，這是一百箍，感謝你。",
+            romanization: "Hó, tsit sī tsi̍t pah khoo, kám-siā lí.",
+            meaning: "好，這是一百元，謝謝你。",
+            correct: true,
+            note: "「箍」是台語裡常用的錢幣量詞。"
+          },
+          {
+            text: "早起，老師好。",
+            romanization: "Tsá-khí, lāu-su hó.",
+            meaning: "早安，老師好。",
+            correct: false
+          },
+          {
+            text: "我欲問路。",
+            romanization: "Guá beh mn̄g-lōo.",
+            meaning: "我想問路。",
+            correct: false
+          }
+        ]
+      }
+    ]
+  },
+  market: {
+    label: "市場購物",
+    title: "陪家人到市場買菜",
+    prompt: "練習問價、數量與禮貌回應，讓台語走進日常採買。",
+    speaker: "菜市阿姨",
+    avatar: "姨",
+    scene: "market",
+    questions: [
+      {
+        line: "少年仔，欲買啥？",
+        translation: "小朋友，要買什麼？",
+        hint: "買東西可以先說品項，再說數量。",
+        answers: [
+          {
+            text: "我欲買兩斤菜頭。",
+            romanization: "Guá beh bé nn̄g kin tshài-thâu.",
+            meaning: "我要買兩斤蘿蔔。",
+            correct: true,
+            note: "「斤」是傳統市場常聽到的重量單位。"
+          },
+          {
+            text: "請問捷運站佇佗位？",
+            romanization: "Tshiánn-mn̄g tsia̍t-ūn-tsām tī tó-uī?",
+            meaning: "請問捷運站在哪裡？",
+            correct: false
+          },
+          {
+            text: "我足愛拍籃球。",
+            romanization: "Guá tsiok ài phah nâ-kiû.",
+            meaning: "我很喜歡打籃球。",
+            correct: false
+          }
+        ]
+      },
+      {
+        line: "這个外濟錢？",
+        translation: "這個多少錢？",
+        hint: "聽到問價時，要回答價格或確認購買意願。",
+        answers: [
+          {
+            text: "一斤三十箍，欲幾斤？",
+            romanization: "Tsi̍t kin sann-tsa̍p khoo, beh kuí kin?",
+            meaning: "一斤三十元，要幾斤？",
+            correct: true,
+            note: "這句能自然接續問價，並追問需要的數量。"
+          },
+          {
+            text: "我欲食蚵仔煎。",
+            romanization: "Guá beh tsia̍h ô-á-tsian.",
+            meaning: "我想吃蚵仔煎。",
+            correct: false
+          },
+          {
+            text: "阮學校佇彼爿。",
+            romanization: "Guán ha̍k-hāu tī hit pîng.",
+            meaning: "我們學校在那邊。",
+            correct: false
+          }
+        ]
+      },
+      {
+        line: "欲共你提袋仔無？",
+        translation: "要幫你拿袋子嗎？",
+        hint: "接受或婉拒幫忙，都可以加上「感謝」。",
+        answers: [
+          {
+            text: "好，麻煩你，感謝。",
+            romanization: "Hó, mâ-huân lí, kám-siā.",
+            meaning: "好，麻煩你，謝謝。",
+            correct: true,
+            note: "「麻煩你」和「感謝」能讓回應更有禮貌。"
+          },
+          {
+            text: "我欲坐公車轉去厝。",
+            romanization: "Guá beh tsē kong-tshia tńg-khì tshù.",
+            meaning: "我要搭公車回家。",
+            correct: false
+          },
+          {
+            text: "老師講課真趣味。",
+            romanization: "Lāu-su kóng-khò tsin tshù-bī.",
+            meaning: "老師上課很有趣。",
+            correct: false
+          }
+        ]
+      }
+    ]
+  },
+  school: {
+    label: "校園問候",
+    title: "上學路上遇見老師同學",
+    prompt: "用簡短自然的問候，建立台語開口說的信心。",
+    speaker: "導師",
+    avatar: "師",
+    scene: "school",
+    questions: [
+      {
+        line: "早起，你今仔日精神好無？",
+        translation: "早安，你今天精神好嗎？",
+        hint: "問候可以先回應狀態，再反問對方。",
+        answers: [
+          {
+            text: "有，我真有精神，老師早。",
+            romanization: "Ū, guá tsin ū tsing-sîn, lāu-su tsá.",
+            meaning: "有，我很有精神，老師早。",
+            correct: true,
+            note: "先回答「有」，再補上問候，對話很完整。"
+          },
+          {
+            text: "這尾魚真新鮮。",
+            romanization: "Tsit bué hî tsin sin-sian.",
+            meaning: "這條魚很新鮮。",
+            correct: false
+          },
+          {
+            text: "我欲一份甜無辣。",
+            romanization: "Guá beh tsi̍t hūn tinn-bô-lua̍h.",
+            meaning: "我要一份甜不辣。",
+            correct: false
+          }
+        ]
+      },
+      {
+        line: "你有看著我的筆無？",
+        translation: "你有看到我的筆嗎？",
+        hint: "回答物品位置時，可以用「佇...」。",
+        answers: [
+          {
+            text: "有，佇你的冊包頂。",
+            romanization: "Ū, tī lí ê tsheh-pau tíng.",
+            meaning: "有，在你的書包上面。",
+            correct: true,
+            note: "「佇」表示在某個位置，是生活對話常用字。"
+          },
+          {
+            text: "一斤三十箍。",
+            romanization: "Tsi̍t kin sann-tsa̍p khoo.",
+            meaning: "一斤三十元。",
+            correct: false
+          },
+          {
+            text: "公車站佇頭前。",
+            romanization: "Kong-tshia-tsām tī thâu-tsîng.",
+            meaning: "公車站在前面。",
+            correct: false
+          }
+        ]
+      },
+      {
+        line: "下課欲做啥？",
+        translation: "下課要做什麼？",
+        hint: "說活動時可用「欲去...」。",
+        answers: [
+          {
+            text: "我欲去操場拍球。",
+            romanization: "Guá beh khì tshau-tiûnn phah-kiû.",
+            meaning: "我要去操場打球。",
+            correct: true,
+            note: "這句同時練到地點和活動，很適合校園情境。"
+          },
+          {
+            text: "小可辣就好。",
+            romanization: "Sió-khuá lua̍h tō hó.",
+            meaning: "一點辣就好。",
+            correct: false
+          },
+          {
+            text: "這个外濟錢？",
+            romanization: "Tsit ê guā tsē tsînn?",
+            meaning: "這個多少錢？",
+            correct: false
+          }
+        ]
+      }
+    ]
+  },
+  transport: {
+    label: "交通問路",
+    title: "在車站附近詢問方向",
+    prompt: "練習禮貌開口、確認地點與理解方向詞。",
+    speaker: "路人伯伯",
+    avatar: "伯",
+    scene: "transport",
+    questions: [
+      {
+        line: "你欲去佗位？",
+        translation: "你要去哪裡？",
+        hint: "問路先說目標地點，會更容易得到幫助。",
+        answers: [
+          {
+            text: "我欲去火車站，請問按怎行？",
+            romanization: "Guá beh khì hué-tshia-tsām, tshiánn-mn̄g án-tsuánn kiânn?",
+            meaning: "我要去火車站，請問怎麼走？",
+            correct: true,
+            note: "「請問」加上目的地，是很清楚也有禮貌的問法。"
+          },
+          {
+            text: "我欲買兩斤菜頭。",
+            romanization: "Guá beh bé nn̄g kin tshài-thâu.",
+            meaning: "我要買兩斤蘿蔔。",
+            correct: false
+          },
+          {
+            text: "老師早，我真有精神。",
+            romanization: "Lāu-su tsá, guá tsin ū tsing-sîn.",
+            meaning: "老師早，我很有精神。",
+            correct: false
+          }
+        ]
+      },
+      {
+        line: "一直行，閣轉倒手爿。",
+        translation: "一直走，再左轉。",
+        hint: "聽到方向後，可以重複確認一次。",
+        answers: [
+          {
+            text: "一直行，倒手爿，敢著？",
+            romanization: "It-ti̍t kiânn, tò-tshiú pîng, kám tio̍h?",
+            meaning: "一直走，左手邊，對嗎？",
+            correct: true,
+            note: "重複關鍵方向能避免聽錯，是實用的溝通策略。"
+          },
+          {
+            text: "欲辣抑是袂辣？",
+            romanization: "Beh lua̍h ia̍h-sī bē lua̍h?",
+            meaning: "要辣還是不辣？",
+            correct: false
+          },
+          {
+            text: "有，佇你的冊包頂。",
+            romanization: "Ū, tī lí ê tsheh-pau tíng.",
+            meaning: "有，在你的書包上面。",
+            correct: false
+          }
+        ]
+      },
+      {
+        line: "免客氣，慢慢仔行。",
+        translation: "不用客氣，慢慢走。",
+        hint: "別人幫忙後，用謝意收尾。",
+        answers: [
+          {
+            text: "感謝你，我知影矣。",
+            romanization: "Kám-siā lí, guá tsai-iánn--ah.",
+            meaning: "謝謝你，我知道了。",
+            correct: true,
+            note: "「我知影矣」可用來表示已經了解。"
+          },
+          {
+            text: "一份蚵仔煎，感謝。",
+            romanization: "Tsi̍t hūn ô-á-tsian, kám-siā.",
+            meaning: "一份蚵仔煎，謝謝。",
+            correct: false
+          },
+          {
+            text: "下課欲去操場。",
+            romanization: "Hā-khò beh khì tshau-tiûnn.",
+            meaning: "下課要去操場。",
+            correct: false
+          }
+        ]
+      }
+    ]
+  }
+};
+
+const phrases = [
+  {
+    taiwanese: "請問，這个外濟錢？",
+    romanization: "Tshiánn-mn̄g, tsit ê guā tsē tsînn?",
+    meaning: "請問，這個多少錢？"
+  },
+  {
+    taiwanese: "我欲買一份，感謝。",
+    romanization: "Guá beh bé tsi̍t hūn, kám-siā.",
+    meaning: "我要買一份，謝謝。"
+  },
+  {
+    taiwanese: "佇佗位？",
+    romanization: "Tī tó-uī?",
+    meaning: "在哪裡？"
+  },
+  {
+    taiwanese: "我知影矣。",
+    romanization: "Guá tsai-iánn--ah.",
+    meaning: "我知道了。"
+  },
+  {
+    taiwanese: "小可就好。",
+    romanization: "Sió-khuá tō hó.",
+    meaning: "一點點就好。"
+  }
+];
+
+const state = {
+  scenarioKey: "nightMarket",
+  questionIndex: 0,
+  score: 0,
+  answered: 0,
+  correct: 0,
+  streak: 0,
+  selected: false,
+  phraseIndex: 0
+};
+
+const elements = {
+  score: document.querySelector("#score"),
+  tabs: document.querySelectorAll(".tab"),
+  sceneStage: document.querySelector(".scene-stage"),
+  sceneLabel: document.querySelector("#sceneLabel"),
+  sceneTitle: document.querySelector("#scene-title"),
+  scenePrompt: document.querySelector("#scenePrompt"),
+  roundText: document.querySelector("#roundText"),
+  progressBar: document.querySelector("#progressBar"),
+  speakerAvatar: document.querySelector("#speakerAvatar"),
+  speakerName: document.querySelector("#speakerName"),
+  challengeTitle: document.querySelector("#challenge-title"),
+  translation: document.querySelector("#translation"),
+  answerList: document.querySelector("#answerList"),
+  feedback: document.querySelector("#feedback"),
+  hintButton: document.querySelector("#hintButton"),
+  nextButton: document.querySelector("#nextButton"),
+  missionAnswered: document.querySelector("#missionAnswered"),
+  missionCorrect: document.querySelector("#missionCorrect"),
+  missionStreak: document.querySelector("#missionStreak"),
+  masteryLabel: document.querySelector("#masteryLabel"),
+  phraseTaiwanese: document.querySelector("#phraseTaiwanese"),
+  phraseRomanization: document.querySelector("#phraseRomanization"),
+  phraseMeaning: document.querySelector("#phraseMeaning"),
+  shufflePhrase: document.querySelector("#shufflePhrase"),
+  modeButtons: document.querySelectorAll(".mode-button"),
+  modeDescription: document.querySelector("#modeDescription")
+};
+
+function getCurrentScenario() {
+  return scenarios[state.scenarioKey];
+}
+
+function getCurrentQuestion() {
+  return getCurrentScenario().questions[state.questionIndex];
+}
+
+function renderScenario() {
+  const scenario = getCurrentScenario();
+  const question = getCurrentQuestion();
+  const progress = ((state.questionIndex + 1) / scenario.questions.length) * 100;
+
+  elements.sceneStage.dataset.scene = scenario.scene;
+  elements.sceneLabel.textContent = scenario.label;
+  elements.sceneTitle.textContent = scenario.title;
+  elements.scenePrompt.textContent = scenario.prompt;
+  elements.speakerAvatar.textContent = scenario.avatar;
+  elements.speakerName.textContent = scenario.speaker;
+  elements.challengeTitle.textContent = `「${question.line}」`;
+  elements.translation.textContent = question.translation;
+  elements.roundText.textContent = `第 ${state.questionIndex + 1} / ${scenario.questions.length} 題`;
+  elements.progressBar.style.width = `${progress}%`;
+  elements.nextButton.disabled = true;
+  state.selected = false;
+
+  elements.feedback.className = "feedback";
+  elements.feedback.innerHTML = "<strong>選一個回答開始挑戰。</strong><p>答對後會看到台羅提示與生活使用說明。</p>";
+  renderAnswers(question);
+}
+
+function renderAnswers(question) {
+  elements.answerList.innerHTML = "";
+
+  question.answers.forEach((answer, index) => {
+    const button = document.createElement("button");
+    button.className = "answer-button";
+    button.type = "button";
+    button.innerHTML = `<strong>${answer.text}</strong><span>${answer.meaning}</span>`;
+    button.addEventListener("click", () => selectAnswer(index));
+    elements.answerList.appendChild(button);
+  });
+}
+
+function selectAnswer(index) {
+  if (state.selected) return;
+
+  const question = getCurrentQuestion();
+  const answer = question.answers[index];
+  const buttons = elements.answerList.querySelectorAll(".answer-button");
+
+  state.selected = true;
+  state.answered += 1;
+  elements.nextButton.disabled = false;
+
+  buttons.forEach((button, buttonIndex) => {
+    const item = question.answers[buttonIndex];
+    button.disabled = true;
+    if (item.correct) button.classList.add("is-correct");
+  });
+
+  if (answer.correct) {
+    state.score += 10 + Math.min(state.streak, 3) * 2;
+    state.correct += 1;
+    state.streak += 1;
+    elements.feedback.className = "feedback success";
+    elements.feedback.innerHTML = `<strong>答對了：${answer.romanization}</strong><p>${answer.note}</p>`;
+  } else {
+    state.streak = 0;
+    buttons[index].classList.add("is-wrong");
+    const correct = question.answers.find((item) => item.correct);
+    elements.feedback.className = "feedback error";
+    elements.feedback.innerHTML = `<strong>再想想：比較自然的回答是「${correct.text}」</strong><p>${correct.romanization}｜${correct.meaning}</p>`;
+  }
+
+  updateStats();
+}
+
+function updateStats() {
+  elements.score.textContent = state.score;
+  elements.missionAnswered.textContent = state.answered;
+  elements.missionCorrect.textContent = state.correct;
+  elements.missionStreak.textContent = state.streak;
+
+  if (state.correct >= 9) {
+    elements.masteryLabel.textContent = "生活高手";
+  } else if (state.correct >= 5) {
+    elements.masteryLabel.textContent = "進階";
+  } else {
+    elements.masteryLabel.textContent = "入門";
+  }
+}
+
+function nextQuestion() {
+  const scenario = getCurrentScenario();
+  state.questionIndex = (state.questionIndex + 1) % scenario.questions.length;
+  renderScenario();
+}
+
+function switchScenario(key) {
+  state.scenarioKey = key;
+  state.questionIndex = 0;
+  elements.tabs.forEach((tab) => {
+    tab.classList.toggle("is-active", tab.dataset.scenario === key);
+  });
+  renderScenario();
+}
+
+function showHint() {
+  const question = getCurrentQuestion();
+  elements.feedback.className = "feedback";
+  elements.feedback.innerHTML = `<strong>提示</strong><p>${question.hint}</p>`;
+}
+
+function renderPhrase() {
+  const phrase = phrases[state.phraseIndex];
+  elements.phraseTaiwanese.textContent = phrase.taiwanese;
+  elements.phraseRomanization.textContent = phrase.romanization;
+  elements.phraseMeaning.textContent = phrase.meaning;
+}
+
+function shufflePhrase() {
+  state.phraseIndex = (state.phraseIndex + 1) % phrases.length;
+  renderPhrase();
+}
+
+function setMode(mode) {
+  elements.modeButtons.forEach((button) => {
+    button.classList.toggle("is-selected", button.dataset.mode === mode);
+  });
+
+  elements.modeDescription.textContent =
+    mode === "class"
+      ? "適合投影後讓學生快速搶答，再請學生兩人一組改編對話。"
+      : "適合學生回家後重複挑戰，記下答錯題目並練習重新說一次。";
+}
+
+elements.tabs.forEach((tab) => {
+  tab.addEventListener("click", () => switchScenario(tab.dataset.scenario));
+});
+
+elements.nextButton.addEventListener("click", nextQuestion);
+elements.hintButton.addEventListener("click", showHint);
+elements.shufflePhrase.addEventListener("click", shufflePhrase);
+elements.modeButtons.forEach((button) => {
+  button.addEventListener("click", () => setMode(button.dataset.mode));
+});
+
+renderScenario();
+renderPhrase();
+updateStats();
+
+    </script>
   </body>
 </html>
