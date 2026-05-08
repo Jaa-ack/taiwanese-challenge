@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="生活台語挑戰：適合國中小學生的閩南語文情境式互動練習網頁。"
+    />
+    <title>生活台語挑戰</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="game-panel" aria-label="生活台語挑戰遊戲區">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">閩南語文｜情境對話練習</p>
+            <h1>生活台語挑戰</h1>
+          </div>
+          <div class="score-card" aria-live="polite">
+            <span>得分</span>
+            <strong id="score">0</strong>
+          </div>
+        </header>
+
+        <nav class="scenario-tabs" aria-label="選擇生活情境">
+          <button class="tab is-active" data-scenario="nightMarket" type="button">
+            <span class="tab-icon">夜</span>
+            夜市點餐
+          </button>
+          <button class="tab" data-scenario="market" type="button">
+            <span class="tab-icon">市</span>
+            市場購物
+          </button>
+          <button class="tab" data-scenario="school" type="button">
+            <span class="tab-icon">校</span>
+            校園問候
+          </button>
+          <button class="tab" data-scenario="transport" type="button">
+            <span class="tab-icon">車</span>
+            交通問路
+          </button>
+        </nav>
+
+        <div class="content-grid">
+          <section class="scene-stage" aria-labelledby="scene-title">
+            <div class="scene-visual" id="sceneVisual" aria-hidden="true"></div>
+            <div class="scene-copy">
+              <p class="scene-label" id="sceneLabel">夜市點餐</p>
+              <h2 id="scene-title">在熱鬧的夜市買晚餐</h2>
+              <p id="scenePrompt">老闆問你想點什麼，請選出最自然的台語回答。</p>
+            </div>
+          </section>
+
+          <section class="challenge-card" aria-labelledby="challenge-title">
+            <div class="progress-row">
+              <span id="roundText">第 1 / 3 題</span>
+              <div class="progress-track" aria-hidden="true">
+                <span id="progressBar"></span>
+              </div>
+            </div>
+
+            <div class="speaker-box">
+              <span class="avatar" id="speakerAvatar">闆</span>
+              <div>
+                <p class="speaker-name" id="speakerName">夜市老闆</p>
+                <h3 id="challenge-title">「你欲食啥物？」</h3>
+                <p class="translation" id="translation">你想吃什麼？</p>
+              </div>
+            </div>
+
+            <div class="answer-list" id="answerList" aria-label="回答選項"></div>
+
+            <div class="feedback" id="feedback" aria-live="polite">
+              <strong>選一個回答開始挑戰。</strong>
+              <p>答對後會看到台羅提示與生活使用說明。</p>
+            </div>
+
+            <div class="actions">
+              <button class="ghost-button" id="hintButton" type="button">看提示</button>
+              <button class="primary-button" id="nextButton" type="button" disabled>下一題</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <aside class="learning-panel" aria-label="學習輔助區">
+        <section class="mini-panel">
+          <div class="panel-heading">
+            <h2>今日任務</h2>
+            <span id="masteryLabel">入門</span>
+          </div>
+          <ul class="mission-list">
+            <li>
+              <span id="missionAnswered">0</span>
+              <p>完成對話題數</p>
+            </li>
+            <li>
+              <span id="missionCorrect">0</span>
+              <p>答對題數</p>
+            </li>
+            <li>
+              <span id="missionStreak">0</span>
+              <p>連續答對</p>
+            </li>
+          </ul>
+        </section>
+
+        <section class="mini-panel phrase-panel">
+          <div class="panel-heading">
+            <h2>句型包</h2>
+            <button class="icon-button" id="shufflePhrase" type="button" aria-label="換一句句型">
+              ↻
+            </button>
+          </div>
+          <article class="phrase-card">
+            <p class="taiwanese" id="phraseTaiwanese">請問，這个外濟錢？</p>
+            <p class="romanization" id="phraseRomanization">Tshiánn-mn̄g, tsit ê guā tsē tsînn?</p>
+            <p class="meaning" id="phraseMeaning">請問，這個多少錢？</p>
+          </article>
+        </section>
+
+        <section class="mini-panel teacher-panel">
+          <h2>教學使用</h2>
+          <div class="mode-grid">
+            <button class="mode-button is-selected" data-mode="class" type="button">
+              課堂破冰
+            </button>
+            <button class="mode-button" data-mode="home" type="button">
+              課後練習
+            </button>
+          </div>
+          <p id="modeDescription">
+            適合投影後讓學生快速搶答，再請學生兩人一組改編對話。
+          </p>
+        </section>
+      </aside>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
