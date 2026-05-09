@@ -32,7 +32,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
   color: var(--ink);
   background:
     linear-gradient(90deg, rgba(15, 118, 110, 0.08) 1px, transparent 1px),
@@ -367,6 +367,7 @@ h1 {
   margin-top: 4px;
   color: var(--muted);
   font-size: 0.92rem;
+  line-height: 1.65;
 }
 
 .answer-button.is-correct {
@@ -394,11 +395,13 @@ h1 {
 .feedback strong {
   display: block;
   margin-bottom: 6px;
+  line-height: 1.55;
 }
 
 .feedback p {
   margin-bottom: 0;
   color: var(--muted);
+  line-height: 1.65;
 }
 
 .feedback.success {
@@ -479,6 +482,36 @@ h1 {
   font-size: 0.84rem;
 }
 
+.level-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: #eef3f5;
+}
+
+.level-button {
+  min-height: 32px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.level-button.is-selected {
+  background: var(--ink);
+  color: #fff;
+}
+
+.level-button:hover {
+  transform: translateY(-1px);
+}
+
 .mission-list {
   list-style: none;
   padding: 0;
@@ -531,6 +564,15 @@ h1 {
   margin-bottom: 8px;
   color: var(--blue);
   font-weight: 700;
+  line-height: 1.75;
+}
+
+.roman-text,
+.romanization {
+  font-family: "Charis SIL", "Gentium Plus", "Noto Sans", "DejaVu Sans", "Lucida Grande", "Segoe UI", Arial, sans-serif;
+  font-variant-ligatures: none;
+  letter-spacing: 0;
+  unicode-bidi: isolate;
 }
 
 .meaning {
@@ -697,7 +739,7 @@ h1 {
                 <rect x="260" y="226" width="196" height="80" rx="8" fill="#0f766e" />
                 <circle cx="148" cy="332" r="18" fill="#172026" />
                 <circle cx="410" cy="332" r="18" fill="#172026" />
-                <text x="280" y="279" text-anchor="middle" fill="#fffdf8" font-size="42" font-weight="900">夜市</text>
+                <text x="280" y="279" text-anchor="middle" fill="#172026" font-size="42" font-weight="900">夜市</text>
               </svg>
               <svg class="scene-art scene-art-market" viewBox="0 0 560 420" role="img">
                 <rect width="560" height="420" fill="#b9d9c4" />
@@ -785,7 +827,10 @@ h1 {
         <section class="mini-panel">
           <div class="panel-heading">
             <h2>今日任務</h2>
-            <span id="masteryLabel">入門</span>
+            <div class="level-toggle" aria-label="選擇顯示難度">
+              <button class="level-button is-selected" data-level="beginner" type="button">初階</button>
+              <button class="level-button" data-level="advanced" type="button">進階</button>
+            </div>
           </div>
           <ul class="mission-list">
             <li>
@@ -1195,7 +1240,7 @@ const homeQuestionSets = {
     {
       line: "你欲啉啥物？",
       translation: "你想喝什麼？",
-      hint: "課後題會更像自己外出點餐，可用「我欲啉...」。",
+      hint: "這題更像自己外出點餐，可用「我欲啉...」。",
       answers: [
         {
           text: "我欲啉一杯紅茶，少冰。",
@@ -1247,7 +1292,7 @@ const homeQuestionSets = {
     {
       line: "愛佇遮食，抑是紮轉去？",
       translation: "要在這裡吃，還是帶回去？",
-      hint: "課後題練習把餐點情境說得更完整。",
+      hint: "練習把餐點情境說得更完整。",
       answers: [
         {
           text: "我欲紮轉去厝食。",
@@ -1275,7 +1320,7 @@ const homeQuestionSets = {
     {
       line: "菜頭欲揀較大枝抑較細枝？",
       translation: "蘿蔔要挑大一點還是小一點？",
-      hint: "課後題加入比較詞，練習把需求說清楚。",
+      hint: "加入比較詞，練習把需求說清楚。",
       answers: [
         {
           text: "請揀較細枝的，較好煮。",
@@ -1355,7 +1400,7 @@ const homeQuestionSets = {
     {
       line: "明仔載欲考試，你準備好矣無？",
       translation: "明天要考試，你準備好了嗎？",
-      hint: "課後題偏向學生自己的校園生活。",
+      hint: "這題偏向學生自己的校園生活。",
       answers: [
         {
           text: "有，我昨昏有複習矣。",
@@ -1435,7 +1480,7 @@ const homeQuestionSets = {
     {
       line: "欲坐幾號公車？",
       translation: "要搭幾號公車？",
-      hint: "課後題會練習確認車號、方向與下車點。",
+      hint: "練習確認車號、方向與下車點。",
       answers: [
         {
           text: "我欲坐五號公車去圖書館。",
@@ -1544,6 +1589,7 @@ const phrases = [
 const state = {
   scenarioKey: "nightMarket",
   mode: "class",
+  level: "beginner",
   questionIndex: 0,
   score: 0,
   answered: 0,
@@ -1576,7 +1622,7 @@ const elements = {
   missionAnswered: document.querySelector("#missionAnswered"),
   missionCorrect: document.querySelector("#missionCorrect"),
   missionStreak: document.querySelector("#missionStreak"),
-  masteryLabel: document.querySelector("#masteryLabel"),
+  levelButtons: document.querySelectorAll(".level-button"),
   phraseTaiwanese: document.querySelector("#phraseTaiwanese"),
   phraseRomanization: document.querySelector("#phraseRomanization"),
   phraseMeaning: document.querySelector("#phraseMeaning"),
@@ -1601,6 +1647,19 @@ function getCurrentQuestion() {
   return getCurrentQuestions()[state.questionIndex];
 }
 
+function isAdvancedLevel() {
+  return state.level === "advanced";
+}
+
+function getScoreGain() {
+  const base = isAdvancedLevel() ? 15 : 10;
+  const streakBonus = isAdvancedLevel()
+    ? Math.min(state.streak, 3) * 3
+    : Math.min(state.streak, 3) * 2;
+
+  return base + streakBonus;
+}
+
 function renderScenario() {
   const scenario = getCurrentScenario();
   const question = getCurrentQuestion();
@@ -1614,17 +1673,20 @@ function renderScenario() {
   elements.speakerAvatar.textContent = scenario.avatar;
   elements.speakerName.textContent = scenario.speaker;
   elements.challengeTitle.textContent = `「${question.line}」`;
-  elements.translation.textContent = question.translation;
+  elements.translation.hidden = isAdvancedLevel();
+  elements.translation.textContent = isAdvancedLevel() ? "" : question.translation;
   elements.roundText.textContent = `${state.mode === "class" ? "課堂破冰" : "課後練習"}｜第 ${state.questionIndex + 1} / ${questions.length} 題`;
   elements.progressBar.style.width = `${progress}%`;
   elements.nextButton.disabled = true;
   elements.nextButton.textContent = "下一題";
-  elements.hintButton.disabled = false;
+  elements.hintButton.disabled = isAdvancedLevel();
   state.selected = false;
   state.showingSummary = false;
 
   elements.feedback.className = "feedback";
-  elements.feedback.innerHTML = "<strong>選一個回答開始挑戰。</strong><p>答對後會看到台羅提示與生活使用說明。</p>";
+  elements.feedback.innerHTML = isAdvancedLevel()
+    ? "<strong>選一个台語回答開始挑戰。</strong><p>進階模式答對加分較高。</p>"
+    : "<strong>選一個回答開始挑戰。</strong><p>答對後會看到台羅提示與生活使用說明。</p>";
   renderAnswers(question);
 }
 
@@ -1635,7 +1697,9 @@ function renderAnswers(question) {
     const button = document.createElement("button");
     button.className = "answer-button";
     button.type = "button";
-    button.innerHTML = `<strong>${answer.text}</strong><span>${answer.meaning}</span>`;
+    button.innerHTML = isAdvancedLevel()
+      ? `<strong>${answer.text}</strong>`
+      : `<strong>${answer.text}</strong><span>${answer.meaning}</span>`;
     button.addEventListener("click", () => selectAnswer(index));
     elements.answerList.appendChild(button);
   });
@@ -1660,18 +1724,22 @@ function selectAnswer(index) {
   });
 
   if (answer.correct) {
-    state.score += 10 + Math.min(state.streak, 3) * 2;
+    state.score += getScoreGain();
     state.correct += 1;
     state.roundCorrect += 1;
     state.streak += 1;
     elements.feedback.className = "feedback success";
-    elements.feedback.innerHTML = `<strong>答對了：${answer.romanization}</strong><p>${answer.note}</p>`;
+    elements.feedback.innerHTML = isAdvancedLevel()
+      ? `<strong>答對了：${answer.text}</strong><p><span class="roman-text">${answer.romanization}</span></p>`
+      : `<strong>答對了：<span class="roman-text">${answer.romanization}</span></strong><p>${answer.note}</p>`;
   } else {
     state.streak = 0;
     buttons[index].classList.add("is-wrong");
     const correct = question.answers.find((item) => item.correct);
     elements.feedback.className = "feedback error";
-    elements.feedback.innerHTML = `<strong>再想想：比較自然的回答是「${correct.text}」</strong><p>${correct.romanization}｜${correct.meaning}</p>`;
+    elements.feedback.innerHTML = isAdvancedLevel()
+      ? `<strong>正確回答：「${correct.text}」</strong><p><span class="roman-text">${correct.romanization}</span></p>`
+      : `<strong>再想想：比較自然的回答是「${correct.text}」</strong><p><span class="roman-text">${correct.romanization}</span>｜${correct.meaning}</p>`;
   }
 
   if (state.questionIndex === getCurrentQuestions().length - 1) {
@@ -1686,14 +1754,6 @@ function updateStats() {
   elements.missionAnswered.textContent = state.answered;
   elements.missionCorrect.textContent = state.correct;
   elements.missionStreak.textContent = state.streak;
-
-  if (state.correct >= 9) {
-    elements.masteryLabel.textContent = "生活高手";
-  } else if (state.correct >= 5) {
-    elements.masteryLabel.textContent = "進階";
-  } else {
-    elements.masteryLabel.textContent = "入門";
-  }
 }
 
 function nextQuestion() {
@@ -1745,7 +1805,10 @@ function renderSummary() {
   elements.roundText.textContent = `${state.mode === "class" ? "課堂破冰" : "課後練習"}｜完成 ${total} 題`;
   elements.progressBar.style.width = "100%";
   elements.challengeTitle.textContent = `「${scenario.label}」挑戰完成`;
-  elements.translation.textContent = `本輪答對 ${correct} / ${total} 題`;
+  elements.translation.hidden = false;
+  elements.translation.textContent = isAdvancedLevel()
+    ? `進階本輪 ${correct} / ${total}`
+    : `本輪答對 ${correct} / ${total} 題`;
   elements.answerList.innerHTML = `
     <div class="summary-list">
       <div class="summary-item"><strong>${correct}</strong><span>答對題數</span></div>
@@ -1754,7 +1817,7 @@ function renderSummary() {
     </div>
   `;
   elements.feedback.className = correct === total ? "feedback success" : "feedback";
-  elements.feedback.innerHTML = `<strong>${message}</strong><p>${state.mode === "class" ? "課堂建議：請學生兩人一組，保留正確句型但替換餐點、地點或物品。" : "課後建議：先朗讀正確句，再不看提示重答一次。"}</p>`;
+  elements.feedback.innerHTML = `<strong>${message}</strong>`;
   elements.hintButton.disabled = true;
   elements.nextButton.disabled = false;
   elements.nextButton.textContent = "再挑戰一次";
@@ -1763,18 +1826,36 @@ function renderSummary() {
 function showHint() {
   const question = getCurrentQuestion();
   elements.feedback.className = "feedback";
-  elements.feedback.innerHTML = `<strong>提示</strong><p>${question.hint}</p>`;
+  elements.feedback.innerHTML = isAdvancedLevel()
+    ? "<strong>進階模式</strong><p>先從關鍵詞判斷情境，再選最自然的台語回應。</p>"
+    : `<strong>提示</strong><p>${question.hint}</p>`;
 }
 
 function renderPhrase() {
   const phrase = phrases[state.phraseIndex];
   elements.phraseTaiwanese.textContent = phrase.taiwanese;
   elements.phraseRomanization.textContent = phrase.romanization;
-  elements.phraseMeaning.textContent = phrase.meaning;
+  elements.phraseMeaning.textContent = isAdvancedLevel() ? "" : phrase.meaning;
+  elements.phraseMeaning.hidden = isAdvancedLevel();
 }
 
 function shufflePhrase() {
   state.phraseIndex = (state.phraseIndex + 1) % phrases.length;
+  renderPhrase();
+}
+
+function setLevel(level) {
+  state.level = level;
+  state.questionIndex = 0;
+  state.roundAnswered = 0;
+  state.roundCorrect = 0;
+  state.showingSummary = false;
+
+  elements.levelButtons.forEach((button) => {
+    button.classList.toggle("is-selected", button.dataset.level === level);
+  });
+
+  renderScenario();
   renderPhrase();
 }
 
@@ -1792,7 +1873,7 @@ function setMode(mode) {
   elements.modeDescription.textContent =
     mode === "class"
       ? "課堂題較短，適合投影搶答、同儕口說與即時改編。"
-      : "課後題會加入比較、借物、搭車確認等延伸情境，適合學生自己重複練習。";
+      : "延伸情境會加入比較、借物、搭車確認等內容，適合學生自己重複練習。";
   renderScenario();
 }
 
@@ -1803,6 +1884,9 @@ elements.tabs.forEach((tab) => {
 elements.nextButton.addEventListener("click", nextQuestion);
 elements.hintButton.addEventListener("click", showHint);
 elements.shufflePhrase.addEventListener("click", shufflePhrase);
+elements.levelButtons.forEach((button) => {
+  button.addEventListener("click", () => setLevel(button.dataset.level));
+});
 elements.modeButtons.forEach((button) => {
   button.addEventListener("click", () => setMode(button.dataset.mode));
 });
