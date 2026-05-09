@@ -196,61 +196,49 @@ h1 {
 .scene-visual {
   position: relative;
   min-height: 320px;
-  background: linear-gradient(180deg, #24384b 0%, #344f63 52%, #f2ca78 52%, #df864c 100%);
+  overflow: hidden;
+  background: #f6f2e9;
 }
 
-.scene-visual::before,
-.scene-visual::after {
-  content: "";
+.scene-art {
   position: absolute;
-  inset: auto 10% 18% 10%;
-  height: 42%;
-  border: 4px solid #182129;
-  border-radius: 8px 8px 2px 2px;
-  background:
-    linear-gradient(90deg, #e5533d 0 18%, #fff4cf 18% 36%, #0f766e 36% 54%, #fff4cf 54% 72%, #e5533d 72%),
-    linear-gradient(#f7d56d, #f7d56d);
-  background-size: 100% 35%, 100% 100%;
-  background-repeat: no-repeat;
-  background-position: top, bottom;
-  box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.22);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  object-fit: cover;
 }
 
-.scene-visual::after {
-  inset: auto 18% 10% 18%;
-  height: 18%;
-  border-width: 3px;
-  background: #fff7df;
+.scene-stage[data-scene="nightMarket"] .scene-art-night,
+.scene-stage[data-scene="market"] .scene-art-market,
+.scene-stage[data-scene="school"] .scene-art-school,
+.scene-stage[data-scene="transport"] .scene-art-transport {
+  display: block;
 }
 
-.scene-stage[data-scene="market"] .scene-visual {
-  background: linear-gradient(180deg, #b9d9c4 0%, #f4e4bd 54%, #6d9d63 54%, #487544 100%);
+.summary-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
 }
 
-.scene-stage[data-scene="market"] .scene-visual::before {
-  background:
-    linear-gradient(90deg, #2b67d1 0 20%, #fffdf8 20% 40%, #f4b63f 40% 60%, #fffdf8 60% 80%, #2b67d1 80%),
-    linear-gradient(#d85b4a, #d85b4a);
+.summary-item {
+  padding: 14px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid var(--line);
 }
 
-.scene-stage[data-scene="school"] .scene-visual {
-  background: linear-gradient(180deg, #8ac6d6 0%, #d9eef2 54%, #c8d971 54%, #90a64f 100%);
+.summary-item strong {
+  display: block;
+  font-size: 1.6rem;
+  line-height: 1;
+  margin-bottom: 6px;
 }
 
-.scene-stage[data-scene="school"] .scene-visual::before {
-  background:
-    linear-gradient(90deg, #f4b63f 0 24%, #fffdf8 24% 48%, #0f766e 48% 72%, #fffdf8 72%),
-    linear-gradient(#f7f1df, #f7f1df);
-}
-
-.scene-stage[data-scene="transport"] .scene-visual {
-  background: linear-gradient(180deg, #a9c7e8 0%, #e7f0f8 58%, #5c6670 58%, #363e45 100%);
-}
-
-.scene-stage[data-scene="transport"] .scene-visual::before {
-  background:
-    linear-gradient(90deg, #e5533d 0 30%, #f4b63f 30% 70%, #e5533d 70%),
-    linear-gradient(#ffffff, #ffffff);
+.summary-item span {
+  color: var(--muted);
+  font-weight: 800;
 }
 
 .scene-copy {
@@ -452,6 +440,12 @@ h1 {
   transform: none;
 }
 
+.ghost-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .learning-panel {
   display: flex;
   flex-direction: column;
@@ -628,7 +622,8 @@ h1 {
   }
 
   .progress-row,
-  .actions {
+  .actions,
+  .summary-list {
     grid-template-columns: 1fr;
   }
 }
@@ -689,7 +684,64 @@ h1 {
 
         <div class="content-grid">
           <section class="scene-stage" aria-labelledby="scene-title">
-            <div class="scene-visual" id="sceneVisual" aria-hidden="true"></div>
+            <div class="scene-visual" id="sceneVisual" aria-hidden="true">
+              <svg class="scene-art scene-art-night" viewBox="0 0 560 420" role="img">
+                <rect width="560" height="420" fill="#24384b" />
+                <rect y="230" width="560" height="190" fill="#d9824a" />
+                <circle cx="96" cy="76" r="22" fill="#f8d66d" />
+                <circle cx="464" cy="76" r="22" fill="#f8d66d" />
+                <path d="M86 106h388l44 86H42z" fill="#e5533d" stroke="#172026" stroke-width="8" />
+                <path d="M116 106h64l-24 86H84zM246 106h68l-12 86h-68zM380 106h64l32 86h-72z" fill="#fff4cf" />
+                <rect x="78" y="190" width="404" height="152" rx="10" fill="#fff7df" stroke="#172026" stroke-width="8" />
+                <rect x="104" y="226" width="132" height="80" rx="8" fill="#f4b63f" />
+                <rect x="260" y="226" width="196" height="80" rx="8" fill="#0f766e" />
+                <circle cx="148" cy="332" r="18" fill="#172026" />
+                <circle cx="410" cy="332" r="18" fill="#172026" />
+                <text x="280" y="279" text-anchor="middle" fill="#fffdf8" font-size="42" font-weight="900">夜市</text>
+              </svg>
+              <svg class="scene-art scene-art-market" viewBox="0 0 560 420" role="img">
+                <rect width="560" height="420" fill="#b9d9c4" />
+                <rect y="250" width="560" height="170" fill="#6d9d63" />
+                <path d="M70 154h420l34 78H36z" fill="#2b67d1" stroke="#172026" stroke-width="8" />
+                <path d="M112 154h74l-22 78H86zM252 154h74l-8 78h-82zM392 154h74l34 78h-82z" fill="#fffdf8" />
+                <rect x="80" y="230" width="400" height="118" rx="10" fill="#fff7df" stroke="#172026" stroke-width="8" />
+                <circle cx="150" cy="282" r="28" fill="#e5533d" />
+                <circle cx="205" cy="282" r="28" fill="#e5533d" />
+                <ellipse cx="284" cy="282" rx="36" ry="24" fill="#1f8a54" />
+                <ellipse cx="354" cy="282" rx="36" ry="24" fill="#1f8a54" />
+                <path d="M405 302c34-54 64-54 88 0-30 15-60 15-88 0z" fill="#f4b63f" />
+                <text x="280" y="122" text-anchor="middle" fill="#172026" font-size="40" font-weight="900">市場買菜</text>
+              </svg>
+              <svg class="scene-art scene-art-school" viewBox="0 0 560 420" role="img">
+                <rect width="560" height="420" fill="#8ac6d6" />
+                <rect y="282" width="560" height="138" fill="#90a64f" />
+                <rect x="92" y="148" width="376" height="172" rx="8" fill="#fff7df" stroke="#172026" stroke-width="8" />
+                <path d="M70 154l210-88 210 88z" fill="#f4b63f" stroke="#172026" stroke-width="8" />
+                <rect x="240" y="238" width="80" height="82" fill="#0f766e" stroke="#172026" stroke-width="6" />
+                <rect x="124" y="184" width="64" height="42" fill="#d9eef2" stroke="#172026" stroke-width="5" />
+                <rect x="372" y="184" width="64" height="42" fill="#d9eef2" stroke="#172026" stroke-width="5" />
+                <circle cx="158" cy="348" r="24" fill="#e5533d" stroke="#172026" stroke-width="5" />
+                <circle cx="402" cy="348" r="24" fill="#2b67d1" stroke="#172026" stroke-width="5" />
+                <rect x="138" y="368" width="40" height="34" rx="8" fill="#172026" />
+                <rect x="382" y="368" width="40" height="34" rx="8" fill="#172026" />
+                <text x="280" y="139" text-anchor="middle" fill="#172026" font-size="38" font-weight="900">校園</text>
+              </svg>
+              <svg class="scene-art scene-art-transport" viewBox="0 0 560 420" role="img">
+                <rect width="560" height="420" fill="#a9c7e8" />
+                <rect y="260" width="560" height="160" fill="#5c6670" />
+                <path d="M0 342h560" stroke="#f4b63f" stroke-width="12" stroke-dasharray="44 32" />
+                <rect x="86" y="162" width="292" height="112" rx="18" fill="#f4b63f" stroke="#172026" stroke-width="8" />
+                <rect x="118" y="190" width="70" height="44" rx="6" fill="#e7f0f8" stroke="#172026" stroke-width="5" />
+                <rect x="214" y="190" width="70" height="44" rx="6" fill="#e7f0f8" stroke="#172026" stroke-width="5" />
+                <rect x="308" y="190" width="42" height="72" rx="6" fill="#fffdf8" stroke="#172026" stroke-width="5" />
+                <circle cx="150" cy="280" r="24" fill="#172026" />
+                <circle cx="318" cy="280" r="24" fill="#172026" />
+                <rect x="420" y="116" width="18" height="188" fill="#172026" />
+                <rect x="390" y="92" width="78" height="52" rx="8" fill="#e5533d" stroke="#172026" stroke-width="6" />
+                <text x="429" y="128" text-anchor="middle" fill="#fffdf8" font-size="26" font-weight="900">站</text>
+                <text x="280" y="78" text-anchor="middle" fill="#172026" font-size="38" font-weight="900">交通問路</text>
+              </svg>
+            </div>
             <div class="scene-copy">
               <p class="scene-label" id="sceneLabel">夜市點餐</p>
               <h2 id="scene-title">在熱鬧的夜市買晚餐</h2>
@@ -776,7 +828,7 @@ h1 {
             </button>
           </div>
           <p id="modeDescription">
-            適合投影後讓學生快速搶答，再請學生兩人一組改編對話。
+            課堂題較短，適合投影搶答、同儕口說與即時改編。
           </p>
         </section>
       </aside>
@@ -1138,6 +1190,329 @@ const scenarios = {
   }
 };
 
+const homeQuestionSets = {
+  nightMarket: [
+    {
+      line: "你欲啉啥物？",
+      translation: "你想喝什麼？",
+      hint: "課後題會更像自己外出點餐，可用「我欲啉...」。",
+      answers: [
+        {
+          text: "我欲啉一杯紅茶，少冰。",
+          romanization: "Guá beh lim tsi̍t pue âng-tê, tsió ping.",
+          meaning: "我要喝一杯紅茶，少冰。",
+          correct: true,
+          note: "「啉」是喝的意思，飲料點餐時很實用。"
+        },
+        {
+          text: "我欲去操場拍球。",
+          romanization: "Guá beh khì tshau-tiûnn phah-kiû.",
+          meaning: "我要去操場打球。",
+          correct: false
+        },
+        {
+          text: "公車站佇頭前。",
+          romanization: "Kong-tshia-tsām tī thâu-tsîng.",
+          meaning: "公車站在前面。",
+          correct: false
+        }
+      ]
+    },
+    {
+      line: "這份欲切無？",
+      translation: "這份要切嗎？",
+      hint: "店家問加工方式時，可以簡短回答需求。",
+      answers: [
+        {
+          text: "好，請共我切做細塊。",
+          romanization: "Hó, tshiánn kā guá tshiat-tsò sè tè.",
+          meaning: "好，請幫我切小塊。",
+          correct: true,
+          note: "「共我」在這裡是請對方幫我做某件事。"
+        },
+        {
+          text: "一斤三十箍，欲幾斤？",
+          romanization: "Tsi̍t kin sann-tsa̍p khoo, beh kuí kin?",
+          meaning: "一斤三十元，要幾斤？",
+          correct: false
+        },
+        {
+          text: "老師早，我真有精神。",
+          romanization: "Lāu-su tsá, guá tsin ū tsing-sîn.",
+          meaning: "老師早，我很有精神。",
+          correct: false
+        }
+      ]
+    },
+    {
+      line: "愛佇遮食，抑是紮轉去？",
+      translation: "要在這裡吃，還是帶回去？",
+      hint: "課後題練習把餐點情境說得更完整。",
+      answers: [
+        {
+          text: "我欲紮轉去厝食。",
+          romanization: "Guá beh tsah tńg-khì tshù tsia̍h.",
+          meaning: "我要帶回家吃。",
+          correct: true,
+          note: "「紮轉去」可用來表示外帶帶回去。"
+        },
+        {
+          text: "有，佇你的冊包頂。",
+          romanization: "Ū, tī lí ê tsheh-pau tíng.",
+          meaning: "有，在你的書包上面。",
+          correct: false
+        },
+        {
+          text: "這尾魚真新鮮。",
+          romanization: "Tsit bué hî tsin sin-sian.",
+          meaning: "這條魚很新鮮。",
+          correct: false
+        }
+      ]
+    }
+  ],
+  market: [
+    {
+      line: "菜頭欲揀較大枝抑較細枝？",
+      translation: "蘿蔔要挑大一點還是小一點？",
+      hint: "課後題加入比較詞，練習把需求說清楚。",
+      answers: [
+        {
+          text: "請揀較細枝的，較好煮。",
+          romanization: "Tshiánn kíng khah sè-ki ê, khah hó tsú.",
+          meaning: "請挑小一點的，比較好煮。",
+          correct: true,
+          note: "「較」可表示比較，能讓需求更精準。"
+        },
+        {
+          text: "我欲一杯紅茶少冰。",
+          romanization: "Guá beh tsi̍t pue âng-tê tsió ping.",
+          meaning: "我要一杯紅茶少冰。",
+          correct: false
+        },
+        {
+          text: "一直行，倒手爿。",
+          romanization: "It-ti̍t kiânn, tò-tshiú pîng.",
+          meaning: "一直走，左手邊。",
+          correct: false
+        }
+      ]
+    },
+    {
+      line: "今仔日有啥物青菜較新鮮？",
+      translation: "今天有什麼蔬菜比較新鮮？",
+      hint: "買菜時常問品質或推薦品項。",
+      answers: [
+        {
+          text: "今仔日白菜真新鮮，欲試看覓無？",
+          romanization: "Kin-á-ji̍t pe̍h-tshài tsin sin-sian, beh tshì khuànn-māi bô?",
+          meaning: "今天白菜很新鮮，要不要試看看？",
+          correct: true,
+          note: "這句能自然回應詢問，也加入推薦。"
+        },
+        {
+          text: "我欲紮轉去厝食。",
+          romanization: "Guá beh tsah tńg-khì tshù tsia̍h.",
+          meaning: "我要帶回家吃。",
+          correct: false
+        },
+        {
+          text: "下課欲去操場。",
+          romanization: "Hā-khò beh khì tshau-tiûnn.",
+          meaning: "下課要去操場。",
+          correct: false
+        }
+      ]
+    },
+    {
+      line: "欲算較俗一點無？",
+      translation: "可以算便宜一點嗎？",
+      hint: "練習有禮貌地議價，不是命令對方。",
+      answers: [
+        {
+          text: "好，算你較俗五箍。",
+          romanization: "Hó, sǹg lí khah sio̍k gōo khoo.",
+          meaning: "好，算你便宜五元。",
+          correct: true,
+          note: "「較俗」表示比較便宜，常見於市場對話。"
+        },
+        {
+          text: "老師講課真趣味。",
+          romanization: "Lāu-su kóng-khò tsin tshù-bī.",
+          meaning: "老師上課很有趣。",
+          correct: false
+        },
+        {
+          text: "請問按怎行？",
+          romanization: "Tshiánn-mn̄g án-tsuánn kiânn?",
+          meaning: "請問怎麼走？",
+          correct: false
+        }
+      ]
+    }
+  ],
+  school: [
+    {
+      line: "明仔載欲考試，你準備好矣無？",
+      translation: "明天要考試，你準備好了嗎？",
+      hint: "課後題偏向學生自己的校園生活。",
+      answers: [
+        {
+          text: "有，我昨昏有複習矣。",
+          romanization: "Ū, guá tsa-hng ū ho̍k-si̍p--ah.",
+          meaning: "有，我昨天有複習了。",
+          correct: true,
+          note: "「複習」可直接用在學習情境，回答很完整。"
+        },
+        {
+          text: "一斤三十箍，欲幾斤？",
+          romanization: "Tsi̍t kin sann-tsa̍p khoo, beh kuí kin?",
+          meaning: "一斤三十元，要幾斤？",
+          correct: false
+        },
+        {
+          text: "我欲啉紅茶。",
+          romanization: "Guá beh lim âng-tê.",
+          meaning: "我要喝紅茶。",
+          correct: false
+        }
+      ]
+    },
+    {
+      line: "你敢會當共我借尺？",
+      translation: "你可以借我尺嗎？",
+      hint: "借物品時可以用「會當」表示可以。",
+      answers: [
+        {
+          text: "會當，這支先予你用。",
+          romanization: "Ē-tàng, tsit ki sing hōo lí iōng.",
+          meaning: "可以，這支先給你用。",
+          correct: true,
+          note: "「會當」是可以的意思，適合用在請求回應。"
+        },
+        {
+          text: "好，算你較俗五箍。",
+          romanization: "Hó, sǹg lí khah sio̍k gōo khoo.",
+          meaning: "好，算你便宜五元。",
+          correct: false
+        },
+        {
+          text: "火車站佇頭前。",
+          romanization: "Hué-tshia-tsām tī thâu-tsîng.",
+          meaning: "火車站在前面。",
+          correct: false
+        }
+      ]
+    },
+    {
+      line: "分組報告欲講啥主題？",
+      translation: "分組報告要講什麼主題？",
+      hint: "回答學習任務時，說出主題和分工會更清楚。",
+      answers: [
+        {
+          text: "阮欲講夜市的食物佮文化。",
+          romanization: "Guán beh kóng iā-tshī ê tsia̍h-mi̍h kah bûn-huà.",
+          meaning: "我們要講夜市的食物和文化。",
+          correct: true,
+          note: "「阮」表示我們，適合分組報告情境。"
+        },
+        {
+          text: "我欲買兩斤菜頭。",
+          romanization: "Guá beh bé nn̄g kin tshài-thâu.",
+          meaning: "我要買兩斤蘿蔔。",
+          correct: false
+        },
+        {
+          text: "小可辣就好。",
+          romanization: "Sió-khuá lua̍h tō hó.",
+          meaning: "一點辣就好。",
+          correct: false
+        }
+      ]
+    }
+  ],
+  transport: [
+    {
+      line: "欲坐幾號公車？",
+      translation: "要搭幾號公車？",
+      hint: "課後題會練習確認車號、方向與下車點。",
+      answers: [
+        {
+          text: "我欲坐五號公車去圖書館。",
+          romanization: "Guá beh tsē gōo hō kong-tshia khì tôo-su-koán.",
+          meaning: "我要搭五號公車去圖書館。",
+          correct: true,
+          note: "把車號和目的地一起說，訊息最清楚。"
+        },
+        {
+          text: "請揀較細枝的。",
+          romanization: "Tshiánn kíng khah sè-ki ê.",
+          meaning: "請挑小一點的。",
+          correct: false
+        },
+        {
+          text: "會當，這支先予你用。",
+          romanization: "Ē-tàng, tsit ki sing hōo lí iōng.",
+          meaning: "可以，這支先給你用。",
+          correct: false
+        }
+      ]
+    },
+    {
+      line: "到圖書館愛佇佗一个站落車？",
+      translation: "到圖書館要在哪一站下車？",
+      hint: "搭車時常需要確認下車站。",
+      answers: [
+        {
+          text: "佇市公所站落車上近。",
+          romanization: "Tī tshī-kong-sóo tsām lo̍h-tshia siōng kīn.",
+          meaning: "在市公所站下車最近。",
+          correct: true,
+          note: "「上近」表示最近，適合用來說明路線。"
+        },
+        {
+          text: "今仔日白菜真新鮮。",
+          romanization: "Kin-á-ji̍t pe̍h-tshài tsin sin-sian.",
+          meaning: "今天白菜很新鮮。",
+          correct: false
+        },
+        {
+          text: "阮欲講夜市文化。",
+          romanization: "Guán beh kóng iā-tshī bûn-huà.",
+          meaning: "我們要講夜市文化。",
+          correct: false
+        }
+      ]
+    },
+    {
+      line: "車來矣，敢是這台？",
+      translation: "車來了，是這台嗎？",
+      hint: "確認資訊時可用「敢是...？」。",
+      answers: [
+        {
+          text: "著，這台有到火車站。",
+          romanization: "Tio̍h, tsit tâi ū kàu hué-tshia-tsām.",
+          meaning: "對，這台有到火車站。",
+          correct: true,
+          note: "「著」在這裡表示對、正確。"
+        },
+        {
+          text: "我昨昏有複習矣。",
+          romanization: "Guá tsa-hng ū ho̍k-si̍p--ah.",
+          meaning: "我昨天有複習了。",
+          correct: false
+        },
+        {
+          text: "請共我切做細塊。",
+          romanization: "Tshiánn kā guá tshiat-tsò sè tè.",
+          meaning: "請幫我切小塊。",
+          correct: false
+        }
+      ]
+    }
+  ]
+};
+
 const phrases = [
   {
     taiwanese: "請問，這个外濟錢？",
@@ -1168,12 +1543,16 @@ const phrases = [
 
 const state = {
   scenarioKey: "nightMarket",
+  mode: "class",
   questionIndex: 0,
   score: 0,
   answered: 0,
   correct: 0,
+  roundAnswered: 0,
+  roundCorrect: 0,
   streak: 0,
   selected: false,
+  showingSummary: false,
   phraseIndex: 0
 };
 
@@ -1210,14 +1589,23 @@ function getCurrentScenario() {
   return scenarios[state.scenarioKey];
 }
 
+function getCurrentQuestions() {
+  if (state.mode === "home") {
+    return homeQuestionSets[state.scenarioKey];
+  }
+
+  return getCurrentScenario().questions;
+}
+
 function getCurrentQuestion() {
-  return getCurrentScenario().questions[state.questionIndex];
+  return getCurrentQuestions()[state.questionIndex];
 }
 
 function renderScenario() {
   const scenario = getCurrentScenario();
   const question = getCurrentQuestion();
-  const progress = ((state.questionIndex + 1) / scenario.questions.length) * 100;
+  const questions = getCurrentQuestions();
+  const progress = ((state.questionIndex + 1) / questions.length) * 100;
 
   elements.sceneStage.dataset.scene = scenario.scene;
   elements.sceneLabel.textContent = scenario.label;
@@ -1227,10 +1615,13 @@ function renderScenario() {
   elements.speakerName.textContent = scenario.speaker;
   elements.challengeTitle.textContent = `「${question.line}」`;
   elements.translation.textContent = question.translation;
-  elements.roundText.textContent = `第 ${state.questionIndex + 1} / ${scenario.questions.length} 題`;
+  elements.roundText.textContent = `${state.mode === "class" ? "課堂破冰" : "課後練習"}｜第 ${state.questionIndex + 1} / ${questions.length} 題`;
   elements.progressBar.style.width = `${progress}%`;
   elements.nextButton.disabled = true;
+  elements.nextButton.textContent = "下一題";
+  elements.hintButton.disabled = false;
   state.selected = false;
+  state.showingSummary = false;
 
   elements.feedback.className = "feedback";
   elements.feedback.innerHTML = "<strong>選一個回答開始挑戰。</strong><p>答對後會看到台羅提示與生活使用說明。</p>";
@@ -1259,6 +1650,7 @@ function selectAnswer(index) {
 
   state.selected = true;
   state.answered += 1;
+  state.roundAnswered += 1;
   elements.nextButton.disabled = false;
 
   buttons.forEach((button, buttonIndex) => {
@@ -1270,6 +1662,7 @@ function selectAnswer(index) {
   if (answer.correct) {
     state.score += 10 + Math.min(state.streak, 3) * 2;
     state.correct += 1;
+    state.roundCorrect += 1;
     state.streak += 1;
     elements.feedback.className = "feedback success";
     elements.feedback.innerHTML = `<strong>答對了：${answer.romanization}</strong><p>${answer.note}</p>`;
@@ -1279,6 +1672,10 @@ function selectAnswer(index) {
     const correct = question.answers.find((item) => item.correct);
     elements.feedback.className = "feedback error";
     elements.feedback.innerHTML = `<strong>再想想：比較自然的回答是「${correct.text}」</strong><p>${correct.romanization}｜${correct.meaning}</p>`;
+  }
+
+  if (state.questionIndex === getCurrentQuestions().length - 1) {
+    elements.nextButton.textContent = "查看總結";
   }
 
   updateStats();
@@ -1300,18 +1697,67 @@ function updateStats() {
 }
 
 function nextQuestion() {
-  const scenario = getCurrentScenario();
-  state.questionIndex = (state.questionIndex + 1) % scenario.questions.length;
+  const questions = getCurrentQuestions();
+
+  if (state.showingSummary) {
+    state.questionIndex = 0;
+    state.roundAnswered = 0;
+    state.roundCorrect = 0;
+    renderScenario();
+    return;
+  }
+
+  if (state.questionIndex === questions.length - 1) {
+    renderSummary();
+    return;
+  }
+
+  state.questionIndex += 1;
   renderScenario();
 }
 
 function switchScenario(key) {
   state.scenarioKey = key;
   state.questionIndex = 0;
+  state.roundAnswered = 0;
+  state.roundCorrect = 0;
+  state.showingSummary = false;
   elements.tabs.forEach((tab) => {
     tab.classList.toggle("is-active", tab.dataset.scenario === key);
   });
   renderScenario();
+}
+
+function renderSummary() {
+  const scenario = getCurrentScenario();
+  const total = getCurrentQuestions().length;
+  const correct = state.roundCorrect;
+  const accuracy = Math.round((correct / total) * 100);
+  const message =
+    correct === total
+      ? "三題全對。你已經能抓到這個情境的對答邏輯，可以試著把句子換成自己的生活版本。"
+      : correct >= 2
+        ? "表現穩定。你已經掌握主要句型，建議再練一次答錯的那一題。"
+        : "先把壓力放低。這次先記住正確句子的開頭，下一輪專心聽關鍵詞。";
+
+  state.showingSummary = true;
+  state.selected = true;
+  elements.roundText.textContent = `${state.mode === "class" ? "課堂破冰" : "課後練習"}｜完成 ${total} 題`;
+  elements.progressBar.style.width = "100%";
+  elements.challengeTitle.textContent = `「${scenario.label}」挑戰完成`;
+  elements.translation.textContent = `本輪答對 ${correct} / ${total} 題`;
+  elements.answerList.innerHTML = `
+    <div class="summary-list">
+      <div class="summary-item"><strong>${correct}</strong><span>答對題數</span></div>
+      <div class="summary-item"><strong>${accuracy}%</strong><span>本輪正確率</span></div>
+      <div class="summary-item"><strong>${state.score}</strong><span>累積得分</span></div>
+    </div>
+  `;
+  elements.feedback.className = correct === total ? "feedback success" : "feedback";
+  elements.feedback.innerHTML = `<strong>${message}</strong><p>${state.mode === "class" ? "課堂建議：請學生兩人一組，保留正確句型但替換餐點、地點或物品。" : "課後建議：先朗讀正確句，再不看提示重答一次。"}</p>`;
+  elements.hintButton.disabled = true;
+  elements.nextButton.disabled = false;
+  elements.nextButton.textContent = "再挑戰一次";
 }
 
 function showHint() {
@@ -1333,14 +1779,21 @@ function shufflePhrase() {
 }
 
 function setMode(mode) {
+  state.mode = mode;
+  state.questionIndex = 0;
+  state.roundAnswered = 0;
+  state.roundCorrect = 0;
+  state.showingSummary = false;
+
   elements.modeButtons.forEach((button) => {
     button.classList.toggle("is-selected", button.dataset.mode === mode);
   });
 
   elements.modeDescription.textContent =
     mode === "class"
-      ? "適合投影後讓學生快速搶答，再請學生兩人一組改編對話。"
-      : "適合學生回家後重複挑戰，記下答錯題目並練習重新說一次。";
+      ? "課堂題較短，適合投影搶答、同儕口說與即時改編。"
+      : "課後題會加入比較、借物、搭車確認等延伸情境，適合學生自己重複練習。";
+  renderScenario();
 }
 
 elements.tabs.forEach((tab) => {
